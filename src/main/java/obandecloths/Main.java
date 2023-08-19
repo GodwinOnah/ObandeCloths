@@ -43,5 +43,10 @@ public class Main {
         clothingsRepo.save(clothings);
     }
 
+    @DeleteMapping("{id}")
+    public void deleteClothings(@PathVariable("id") Integer id){
+        clothingsRepo.deleteById(id);
+    }
+
 }
 
