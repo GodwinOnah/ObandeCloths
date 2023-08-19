@@ -2,9 +2,7 @@ package obandecloths;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,4 +24,24 @@ public class Main {
     public List<Clothings> getClothings(){
         return clothingsRepo.findAll();
     }
+
+    record NewRequest(
+        String clothName,
+        String clothPicture,
+        Integer clothPrice
+    ){
+    };
+
+    @PostMapping
+    public void addClothings(@RequestBody NewRequest newRequest){
+        Clothings clothings = new Clothings();
+
+        clothings.setClothName(newRequest.clothName);
+        clothings.setClothPicture(newRequest.clothPicture);
+        clothings.setClothPrice(newRequest.clothPrice);
+
+        clothingsRepo.save(clothings);
+    }
+
 }
+
