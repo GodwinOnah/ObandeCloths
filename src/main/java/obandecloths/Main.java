@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 @RestController
@@ -23,6 +24,11 @@ public class Main {
     @GetMapping
     public List<Clothings> getClothings(){
         return clothingsRepo.findAll();
+    }
+
+    @GetMapping("{id}")
+    public Optional<Clothings> getByIdClothings(@PathVariable("id") Integer id){
+        return clothingsRepo.findById(id);
     }
 
     record NewRequest(
@@ -48,5 +54,15 @@ public class Main {
         clothingsRepo.deleteById(id);
     }
 
+    @PutMapping("{id}")
+    public void updateClothings(@PathVariable("id") Integer id,@RequestBody NewRequest newRequest){
+
+//        Optional<Clothings> clothings = clothingsRepo.findById(id);
+//        clothings.setClothName(newRequest.clothName);
+//        clothings.setClothPicture(newRequest.clothPicture);
+//        clothings.setClothPrice(newRequest.clothPrice);
+//
+//        clothingsRepo.save(clothings);
+    }
 }
 
