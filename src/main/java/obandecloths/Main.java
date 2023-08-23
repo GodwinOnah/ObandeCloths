@@ -2,7 +2,9 @@ package obandecloths;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +12,7 @@ import java.util.Optional;
 @SpringBootApplication
 @RestController
 @RequestMapping("api/clothings")
+@CrossOrigin("*")
 public class Main {
 
     public final ClothingsRepo clothingsRepo;
@@ -21,6 +24,7 @@ public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class,args);
     }
+
     @GetMapping
     public List<Clothings> getClothings(){
         return clothingsRepo.findAll();
@@ -33,17 +37,20 @@ public class Main {
 
     record NewRequest(
         String clothName,
-        String clothPicture,
         Integer clothPrice
     ){
     };
 
-    @PostMapping
-    public void addClothings(@RequestBody NewRequest newRequest){
+    @PostMapping(
+            path = "images/Downloads",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public void addClothings(@RequestBody NewRequest newRequest, @RequestParam("file") MultipartFile file){
         Clothings clothings = new Clothings();
 
         clothings.setClothName(newRequest.clothName);
-        clothings.setClothPicture(newRequest.clothPicture);
+        clothings.setClothPicture(file.toString());
         clothings.setClothPrice(newRequest.clothPrice);
 
         clothingsRepo.save(clothings);
@@ -63,6 +70,7 @@ public class Main {
 //        clothings.setClothPrice(newRequest.clothPrice);
 //
 //        clothingsRepo.save(clothings);
+//        clothingsRepo.findById(id).clothings);
     }
 }
 
