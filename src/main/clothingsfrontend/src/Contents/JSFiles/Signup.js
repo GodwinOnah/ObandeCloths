@@ -1,6 +1,23 @@
 import '../../Contents/CSSFiles/Login.css';
+import axios from 'axios';
+import {useState, useEffect} from 'react';
 
 export const Signup=()=>{
+
+const [upload,SetUpload] = useState([]);
+
+ const fetchUser = () =>{
+       axios.post("http://localhost:8080/api/signup").then(res =>{
+         if(res){
+         return "Saved Successfully"}
+         return "Data not saved"
+       })
+     };
+
+      useEffect(()=>{
+             fetchUser();
+            },[]);
+
 	return(
 			<div>
 				<h1>Signup</h1>

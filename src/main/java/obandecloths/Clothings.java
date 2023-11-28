@@ -3,12 +3,13 @@ package obandecloths;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 public class Clothings {
     @Id
     @SequenceGenerator(
-            name = " ",
+            name = "",
             sequenceName = "Clothing_id_sequence",
             allocationSize = 1
     )
@@ -18,17 +19,33 @@ public class Clothings {
     )
     private Integer clothId;
     private String clothName;
-    private String clothPicture;
+    private String clothPictureId;
     private Integer clothPrice;
 
-    public Clothings(Integer clothId, String clothName, String clothPicture, Integer clothPrice) {
+
+    public Clothings(Integer clothId, String clothName, String clothPictureId, Integer clothPrice, String clothS3Link) {
         this.clothId = clothId;
         this.clothName = clothName;
-        this.clothPicture = clothPicture;
+        this.clothPictureId = clothPictureId;
         this.clothPrice = clothPrice;
+
     }
 
-    public Clothings(){}
+    public Clothings() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Clothings clothings = (Clothings) o;
+        return Objects.equals(clothId, clothings.clothId) && Objects.equals(clothName, clothings.clothName) && Objects.equals(clothPictureId, clothings.clothPictureId) && Objects.equals(clothPrice, clothings.clothPrice);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clothId, clothName, clothPictureId, clothPrice);
+    }
 
     public Integer getClothId() {
         return clothId;
@@ -46,12 +63,12 @@ public class Clothings {
         this.clothName = clothName;
     }
 
-    public String getClothPicture() {
-        return clothPicture;
+    public String getClothPictureId() {
+        return clothPictureId;
     }
 
-    public void setClothPicture(String clothPicture) {
-        this.clothPicture = clothPicture;
+    public void setClothPictureId(String clothPictureId) {
+        this.clothPictureId = clothPictureId;
     }
 
     public Integer getClothPrice() {
@@ -60,28 +77,5 @@ public class Clothings {
 
     public void setClothPrice(Integer clothPrice) {
         this.clothPrice = clothPrice;
-    }
-
-//    @Override
-//    public String toString() {
-//        return "Clothings{" +
-//                "clothId=" + clothId +
-//                ", clothName='" + clothName + '\'' +
-//                ", clothPicture='" + clothPicture + '\'' +
-//                ", clothPrice=" + clothPrice +
-//                '}';
-//    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Clothings clothings = (Clothings) o;
-        return Objects.equals(clothId, clothings.clothId) && Objects.equals(clothName, clothings.clothName) && Objects.equals(clothPicture, clothings.clothPicture) && Objects.equals(clothPrice, clothings.clothPrice);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(clothId, clothName, clothPicture, clothPrice);
     }
 }

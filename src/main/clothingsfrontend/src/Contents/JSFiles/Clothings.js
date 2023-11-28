@@ -1,5 +1,5 @@
 import axios from 'axios';
-import react, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 
 export const Clothings = () => {
 
@@ -7,14 +7,12 @@ export const Clothings = () => {
 
      const fetchClothings = () =>{
        axios.get("http://localhost:8080/api/clothings").then(res =>{
-         console.log(res.data)
+      
          SetClothings(res.data);
        })
      };
      
-       useEffect(()=>{
-         fetchClothings();
-       },[]);
+
 
        return clothings.map((clothing,index)=>{
          return (

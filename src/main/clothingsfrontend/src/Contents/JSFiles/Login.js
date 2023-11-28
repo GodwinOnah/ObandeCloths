@@ -1,7 +1,24 @@
 import '../../Contents/CSSFiles/Login.css';
 import {Link } from "react-router-dom";
+import axios from 'axios';
+import {useState, useEffect} from 'react';
+
 
 export const Login=()=>{
+
+const [exist,SetExist] = useState([]);
+
+ const fetchUser = () =>{
+       axios.post("http://localhost:8080/api/login").then(res =>{
+         if(res) return "Logged in successfully";
+         return "Not Logged in";
+       })
+     };
+
+      useEffect(()=>{
+             fetchUser();
+            },[]);
+
 	return(
 			<div>
 				<h1>Login</h1>

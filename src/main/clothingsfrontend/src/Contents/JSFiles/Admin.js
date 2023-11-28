@@ -1,32 +1,32 @@
 import axios from 'axios';
-import React,{Component,useCallback, useState} from 'react';
+import React,{useCallback, useState} from 'react';
 import {useDropzone} from 'react-dropzone';
 import '../../Contents/CSSFiles/Admin.css'; 
 
-const [clothName,setClothName] = useState("");
-const [clothPrice,setClothPrice] = useState("");
-const [ClothPictureId,setClothPictureId] = useState("");
-const [formData,setFormData] = useState(null);
-
-
 export const Admin=()=>{
+
+//   const [clothName,setClothName] = useState("");
+// const [clothPrice,setClothPrice] = useState("");
+// const [clothPictureId,setClothPictureId] = useState("");
+const [data,setData] = useState({clothName:"",clothPrice:"",clothPictureId:""});
+
 	return(
 			<div>
 				<h1>Add New Product</h1>
         <hr/>
         <div class="container">
-          <form onSubmit={submitForm()}>
+          <form  post ="" onSubmit={formSubmit}>
           <div class="row addPro ">
             <div  class="col-12 addPro2">
-                <input type='text' placeholder="Cloth Name" />
+                <input type='text' name="clothName" onChange={handleChange} value={data.clothName} placeholder="Cloth Name" />
             </div>
             <div class="col-12 addPro2">
-                <input type='text' placeholder="Price" />
+                <input type='text' name="clothPrice" onChange={handleChange} value={data.clothPrice} placeholder="Price" />
              </div>
              <div class="col-12 addPro2">
                 <div class="drop">
                 <Dropzone />
-                <input type='file' onChange={addClothData(e)} placeholder="Upload Picture" />
+                <input type='file' name="clothPictureId" onChange={handleChange} value={data.clothPictureId}  placeholder="Upload Picture" />
                 </div> 
               </div>
               <div class="col-12 addPro2">
@@ -41,34 +41,69 @@ export const Admin=()=>{
 
 		)
 
-   function onSubmit(e){
-    e.preventDefault();
-
-      if(e.target.files.length>0){      
-         const file = e.target.files[0];
-         var thisFormData = new FormData();
-         thisFormData.append('myFiles',file);
-        formData = thisFormData;
-        
-    }}
-
-    function addClothData(e){
-      let data ={
-        clothName:clothName,
-        clothPrice:clothPrice,
-        ClothPictureId:ClothPictureId
-      }
-
+    function handleChange(e){
+        const name = e.target.name;
+        const value = e.target.value;
+        setData({...data, [name]:value})
     }
+
+   function formSubmit(){
+
+    console.log(55);
+    console.log(data);
+    
+    // axios.post('http://localhost:8080/api/addClothings',data
+    // //   {
+    // //     headers:{
+    // //     "Content-Type": "Json"
+    // //   }
+    // // }
+    // ).then(()=>{
+    //     console.log("File Data sent");
+    // }).catch(error=>{
+    //     console.log(error);
+    // })
+
+    // let data ={
+    //   clothName:clothName,
+    //   clothPrice:clothPrice,
+    //   clothPictureId:clothPictureId
+    // }
+    //  console.log(data);
+
+    // setFormData(data);
+
+    //   if(e.target.files.length>0){      
+    //      const file = e.target.files[0];
+    //      var thisFormData = new FormData();
+    //      thisFormData.append('myFiles',file);
+    //     formData = thisFormData;
+        
+    // }
+    // axios.post('http://localhost:8080/api/addClothings',formData
+  //   {
+  //     headers:{
+  //     "Content-Type": "Json"
+  //   }
+  // }
+  // ).then(()=>{
+  //     console.log("File Data sent");
+  // }).catch(error=>{
+  //     console.log(error);
+  // })
+  // }, [])
+  // }
+
+  }
 
         function Dropzone({clothPictureId}) {
             const onDrop = useCallback(acceptedFiles => {
               const file = acceptedFiles[0];
     
-              const formData = new FormData();
-              formData.append("file",file);
+              const formDataDropZone = new FormData();
+              formDataDropZone.append("file",file);
     
-              axios.post(`http://localhost:8080/api/clothings/${clothPictureId}/images/Uploads`,formData,
+              axios.post(`http://localhost:8080/api/clothings/${clothPictureId}/images/Uploads`,formDataDropZone,
               {
                 headers:{
                 "Content-Type": "multipart/form-data"
@@ -79,7 +114,8 @@ export const Admin=()=>{
             }).catch(error=>{
                 console.log(error);
             })
-            }, [])
+            }, [clothPictureId]
+            )
     
             const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
           
