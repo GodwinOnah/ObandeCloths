@@ -23,6 +23,7 @@ public class User {
     private String Email;
     private String Address;
     private String Phone;
+    private String Password;
 
     @Override
     public boolean equals(Object o) {
@@ -36,8 +37,6 @@ public class User {
     public int hashCode() {
         return Objects.hash(UserId, FirstName, LastName, Email, Address, Phone, Password);
     }
-
-    private String Password;
 
     public Integer getUserId() {
         return UserId;
@@ -104,8 +103,6 @@ public class User {
         Phone = phone;
         Password = password;
     }
-
-
 
     public User(){}
 }

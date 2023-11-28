@@ -16,9 +16,7 @@ import java.util.*;
 
 import static org.springframework.http.MediaType.*;
 @SpringBootApplication
-
 public class Main {
-
 
     public Main() {
     }

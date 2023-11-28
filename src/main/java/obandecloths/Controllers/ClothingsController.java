@@ -1,10 +1,13 @@
 package obandecloths.Controllers;
 import obandecloths.Clothings;
-import obandecloths.ClothingsRepo;
+import obandecloths.Repositories.ClothingsRepo;
+import obandecloths.Services.ClothingService;
 import obandecloths.bucket.BucketName;
 import obandecloths.files.Files;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -17,27 +20,22 @@ import static org.springframework.http.MediaType.*;
 @RequestMapping("api/clothings")
 @CrossOrigin("*")
 public class ClothingsController {
-    public final ClothingsRepo clothingsRepo;
-    public final Files files;
+    public final ClothingService clothingService;
 
-    public ClothingsController (ClothingsRepo clothingsRepo, Files files) {
 
-        this.clothingsRepo = clothingsRepo;
-        this.files = files;
+    @Autowired
+    public ClothingsController (ClothingService clothingService) {
+        this.clothingService = clothingService;
     }
-
-
 
     @GetMapping
     public List<Clothings> getClothings(){
-
-        return clothingsRepo.findAll();
+        return clothingService.getClothings();
     }
 
     @GetMapping("{id}")
     public Optional<Clothings> getByIdClothings(@PathVariable("id") Integer id){
-
-        return Optional.ofNullable(clothingsRepo.findById(id).orElseThrow(RuntimeException::new));
+        return clothingService.getByIdClothings(id);
     }
 
     record NewRequest(
@@ -55,7 +53,8 @@ public class ClothingsController {
         clothings.setClothName(newRequest.clothName);
         clothings.setClothPictureId(newRequest.clothPictureId);
         clothings.setClothPrice(newRequest.clothPrice);
-        clothingsRepo.save(clothings);
+
+       clothingService.addClothings(clothings);
     }
 
     @PostMapping(
@@ -66,44 +65,25 @@ public class ClothingsController {
     public void uploadClothingsImage(@PathVariable Integer clothId , @RequestParam("file") MultipartFile file)
             throws URISyntaxException
     {
-        if(file.isEmpty()){
-            throw new IllegalStateException("Cannot upload empty file ["+file.getSize()+"]");
-        }
-
-        if(Arrays.asList(IMAGE_JPEG.getType(),IMAGE_PNG.getType(),IMAGE_GIF.getType()).contains(file.getContentType())){
-            throw new IllegalStateException("Cannot upload none image file");
-        }
-
-        if(!clothingsRepo.existsById(clothId)){
-            throw new IllegalStateException("Cloth does not exist");
-        };
-
-        Map<String, String> metadata = new HashMap<>();
-        metadata.put("Content-Type", file.getContentType());
-        metadata.put("Content-Length",String.valueOf(file.getSize()));
-
-        String path = String.format("%s/%s", BucketName.PROFILE_IMAGE.getBucketName(),clothId);
-        String fileName = String.format("%s-%s",file.getName(),UUID.randomUUID());
-        try{ files.saveFiles(path,fileName, Optional.of(metadata),file.getInputStream());}
-        catch (IOException e){
-            throw new IllegalStateException(e);
-
-        }
+        clothingService.uploadClothingsImage(clothId,file);
 
     }
 
     @DeleteMapping("{id}")
-    public void deleteClothings(@PathVariable("id") Integer id){
-        clothingsRepo.deleteById(id);
+    public boolean deleteClothings(@PathVariable("id") Integer id){
+        clothingService.deleteClothings(id);
+        return true;
     }
 
     @PutMapping("{id}")
-    public void updateClothings(@PathVariable("id") Integer id,@RequestBody NewRequest newRequest){
+    public boolean updateClothings(@PathVariable("id") Integer id,@RequestBody NewRequest newRequest){
 
-        Clothings clothings = clothingsRepo.findById(id).orElseThrow(RuntimeException::new);
+        Clothings clothings = clothingService.findClothings(id);
         clothings.setClothName(newRequest.clothName);
         clothings.setClothPictureId(newRequest.clothPictureId);
         clothings.setClothPrice(newRequest.clothPrice);
-        clothingsRepo.save(clothings);
+
+        clothingService.updateClothings(id,clothings);
+        return true;
     }
 }

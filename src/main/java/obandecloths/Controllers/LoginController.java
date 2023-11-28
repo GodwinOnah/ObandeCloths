@@ -1,23 +1,24 @@
 package obandecloths.Controllers;
 
-import obandecloths.Clothings;
-import obandecloths.SignupRepo;
+import obandecloths.Repositories.SignupRepo;
+import obandecloths.Services.SignupService;
 import obandecloths.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
-import java.util.Optional;
 
 @SpringBootApplication
 @RestController
 @RequestMapping("api/login")
 @CrossOrigin("*")
 public class LoginController {
-    public final SignupRepo signupRepo;
+    public final SignupService signupService;
 
-    public LoginController(SignupRepo signupRepo) {
-        this.signupRepo = signupRepo;
+    @Autowired
+    public LoginController(SignupService signupService) {
+        this.signupService = signupService;
     }
 
     record NewRequest(
@@ -29,11 +30,10 @@ public class LoginController {
     public boolean loginUser(@RequestBody NewRequest newRequest)
             throws URISyntaxException
     {
-        User user = new User();
-        boolean emailExist = signupRepo.existsByEmail(newRequest.Email);
-        boolean passwordExist = signupRepo.existsByPassword(newRequest.Password);
+       User emailExist = signupService.findByEmail(newRequest.Email);
+        User passwordExist = signupService.findByPassword(newRequest.Password);
 
-        if(emailExist && passwordExist){
+        if(emailExist!=null && passwordExist!=null){
             return true;
         }
         return false;

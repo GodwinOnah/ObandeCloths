@@ -1,8 +1,11 @@
 package obandecloths.Controllers;
 
+import obandecloths.Services.SignupService;
 import obandecloths.User;
-import obandecloths.SignupRepo;
+import obandecloths.Repositories.SignupRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
@@ -12,9 +15,12 @@ import java.net.URISyntaxException;
 @RequestMapping("api/signup")
 @CrossOrigin("*")
 public class SignupController {
-    public final SignupRepo signupRepo;
-    public SignupController(SignupRepo signupRepo) {
-        this.signupRepo = signupRepo;
+
+private final SignupService signupService;
+
+    @Autowired
+    public SignupController(SignupService signupService) {
+        this.signupService= signupService;
     }
 
     record NewRequest(
@@ -27,17 +33,27 @@ public class SignupController {
     ){};
 
     @PostMapping
-    public boolean addUser(@RequestBody NewRequest newRequest)
+    public String addUser(@RequestBody NewRequest newRequest)
             throws URISyntaxException
     {
-        User signup = new User();
-        signup.setFirstName(newRequest.FirstName);
-        signup.setLastName(newRequest.LastName);
-        signup.setEmail(newRequest.Email);
-        signup.setAddress(newRequest.Address);
-        signup.setPhone(newRequest.Phone);
-        signup.setPassword(newRequest.Password);
-        signupRepo.save(signup);
-        return true;
+        User emailExist = signupService.findByEmail(newRequest.Email);
+        if(emailExist!=null) return "Email already exist";
+        User user = new User();
+        user.setFirstName(newRequest.FirstName);
+        user.setLastName(newRequest.LastName);
+        user.setEmail(newRequest.Email);
+        user.setAddress(newRequest.Address);
+        user.setPhone(newRequest.Phone);
+        user.setPassword(newRequest.Password);
+
+        boolean success = signupService.addUser(user);
+
+        if(success) return "Registered successfully";
+
+        return "Not registered";
+
+
     }
+
+
 }
