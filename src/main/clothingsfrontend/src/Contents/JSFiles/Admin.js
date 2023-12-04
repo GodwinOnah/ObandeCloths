@@ -30,6 +30,34 @@ useEffect(()=>{
   fetchUsers();
 },[]);
 
+const userY = () =>{
+  return (
+    <table class="table table-hover">
+    <thead class="thead-light">
+         <tr>
+         <th>USER</th>
+         <th>FIRST NAME</th>
+         <th>LAST NAME</th>
+         <th>EMAIL</th>
+         <th>ADDRESS</th>
+         <th>PHONE NUMBER</th>
+         </tr>
+       </thead>
+        <tbody>   
+             <tr>
+             {  userX.map((user,index)=>(<li key = {index}>
+               <th>{index+1}</th>
+               <td>{user.firstName}</td>
+               <td>{user.lastName}</td>
+               <td>{user.email}</td>
+               <td>{user.address}</td>
+               <td>{user.phone}</td>
+         </li> 
+        ))}
+               </tr>
+            </tbody>
+           </table>  
+  )}
  
 	return(
 			<div>
@@ -37,11 +65,10 @@ useEffect(()=>{
         <h1>Registered Customers</h1>
         <hr/>
         <div class="listOfCustomers" >
-      {
-          userX.map((user,index)=>(<li key = {index}>
-          {user.firstName} {user.lastName}
-        </li>))
-    }
+         
+         {userY()}
+        
+     
         </div>
         </div>
 

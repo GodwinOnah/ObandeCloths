@@ -22,13 +22,13 @@ const handleSubmit = (e) =>{
   SetIsSigningIn(true);
   const datax = {firstName,lastName,email,address,phone, password};
 
-  if(password != confirmPassword){
+  if(password !== confirmPassword){
     toast.warning("Password missmatch");
     SetIsSigningIn(false);
     return;
   }
 
-  if(password == confirmPassword){
+  if(password === confirmPassword){
     SetData(datax);
   fetch("http://localhost:8080/api/signup",
  {
