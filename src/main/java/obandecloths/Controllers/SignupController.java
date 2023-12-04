@@ -1,16 +1,15 @@
 package obandecloths.Controllers;
 
+import obandecloths.Clothings;
 import obandecloths.Services.SignupService;
-import obandecloths.User;
-import obandecloths.Repositories.SignupRepo;
+import obandecloths.UserX;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
-@SpringBootApplication
 @RestController
 @RequestMapping("api/signup")
 @CrossOrigin("*")
@@ -24,36 +23,43 @@ private final SignupService signupService;
     }
 
     record NewRequest(
-            String FirstName,
-            String LastName,
-            String Email,
-            String Address,
-            String Phone,
-            String Password
+            String firstName,
+            String lastName,
+            String email,
+            String address,
+            String phone,
+            String password
     ){};
 
+    @GetMapping
+    public List<UserX> getUsers() {
+        return signupService.getUser();
+    }
+
+    @GetMapping("{id}")
+    public Optional<UserX> getUserById(@PathVariable("id") Integer id) {
+        return signupService.getUserById(id);
+    }
+
     @PostMapping
-    public String addUser(@RequestBody NewRequest newRequest)
+    public  String addUser(@RequestBody NewRequest newRequest)
             throws URISyntaxException
     {
-        User emailExist = signupService.findByEmail(newRequest.Email);
+
+        UserX emailExist = signupService.findByEmail(newRequest.email);
         if(emailExist!=null) return "Email already exist";
-        User user = new User();
-        user.setFirstName(newRequest.FirstName);
-        user.setLastName(newRequest.LastName);
-        user.setEmail(newRequest.Email);
-        user.setAddress(newRequest.Address);
-        user.setPhone(newRequest.Phone);
-        user.setPassword(newRequest.Password);
+        UserX user = new UserX();
+        user.setFirstName(newRequest.firstName);
+        user.setLastName(newRequest.lastName);
+        user.setEmail(newRequest.email);
+        user.setAddress(newRequest.address);
+        user.setPhone(newRequest.phone);
+        user.setPassword(newRequest.password);
 
         boolean success = signupService.addUser(user);
 
         if(success) return "Registered successfully";
 
         return "Not registered";
-
-
     }
-
-
 }

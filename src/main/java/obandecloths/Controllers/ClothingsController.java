@@ -15,7 +15,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 import static org.springframework.http.MediaType.*;
 
-@SpringBootApplication
 @RestController
 @RequestMapping("api/clothings")
 @CrossOrigin("*")
@@ -54,7 +53,7 @@ public class ClothingsController {
         clothings.setClothPictureId(newRequest.clothPictureId);
         clothings.setClothPrice(newRequest.clothPrice);
 
-       clothingService.addClothings(clothings);
+        clothingService.addClothings(clothings);
     }
 
     @PostMapping(

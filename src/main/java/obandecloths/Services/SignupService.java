@@ -1,35 +1,45 @@
 package obandecloths.Services;
 
 import obandecloths.Repositories.SignupRepo;
-import obandecloths.User;
+import obandecloths.UserX;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class SignupService {
 
-    public final SignupRepo signupRepo;
+    private final SignupRepo signupRepo;
 
     @Autowired
     public SignupService(SignupRepo signupRepo) {
         this.signupRepo = signupRepo;
     }
 
-    public boolean addUser(User user)
+    public boolean addUser(UserX user)
             throws URISyntaxException {
         signupRepo.save(user);
         return true;
     }
 
-    public User findByEmail(String Email) {
-        return signupRepo.findByEmail(Email);
+    public List<UserX> getUser() {
+        return signupRepo.findAll();
+    }
+
+    public Optional<UserX> getUserById(Integer id) {
+        return  Optional.ofNullable(signupRepo.findById(id).orElseThrow(RuntimeException::new));
+    }
+
+
+    public UserX findByEmail(String email) {
+        return signupRepo.findByEmail(email);
     };
 
-    public User findByPassword(String Password) {
-        return signupRepo.findByPassword(Password);
+    public UserX findByPassword(String password) {
+        return signupRepo.findByPassword(password);
     }
 
     ;

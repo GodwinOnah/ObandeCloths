@@ -1,54 +1,120 @@
 import '../../Contents/CSSFiles/Login.css';
-import axios from 'axios';
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
+import { toast,ToastContainer } from "react-toastify";
+
 
 export const Signup=()=>{
 
-const [upload,SetUpload] = useState([]);
+const [firstName,SetFirstName] = useState('');
+const [lastName,SetLastName] = useState('');
+const [email,SetEmail] = useState('');
+const [address,SetAddress] = useState('');
+const [phone,SetPhone] = useState('');
+const [password,SetPassword] = useState('');
+const [confirmPassword,SetConfirmPassword] = useState('');
+const [isSigningIn,SetIsSigningIn] = useState(false)
+const [data,SetData] = useState({});
 
- const fetchUser = () =>{
-       axios.post("http://localhost:8080/api/signup").then(res =>{
-         if(res){
-         return "Saved Successfully"}
-         return "Data not saved"
-       })
-     };
 
-      useEffect(()=>{
-             fetchUser();
-            },[]);
+
+const handleSubmit = (e) =>{
+  e.preventDefault();
+  SetIsSigningIn(true);
+  const datax = {firstName,lastName,email,address,phone, password};
+
+  if(password != confirmPassword){
+    toast.warning("Password missmatch");
+    SetIsSigningIn(false);
+    return;
+  }
+
+  if(password == confirmPassword){
+    SetData(datax);
+  fetch("http://localhost:8080/api/signup",
+ {
+  method: 'POST',
+  headers:{
+      "Content-Type": "application/json"
+   },
+  body: JSON.stringify(data)
+  }).then(res =>{
+    return res.text();      
+       }).then(res =>{ 
+        toast.warning(res);
+        SetIsSigningIn(false);     
+           })
+      };
+  }
+
 
 	return(
 			<div>
+        <ToastContainer
+              position='top-right'
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme='light'
+              />
 				<h1>Signup</h1>
         <hr/>
+        <form onSubmit={handleSubmit}>
         <div class="container">
           <div class="row  ">
             <div  class="col-12 login">
-                <input type='text' placeholder="First Name" />
+                <input 
+                value={firstName}
+                onChange = {(e)=>SetFirstName(e.target.value)}
+                type='text' placeholder="First Name" />
             </div>
             <div  class="col-12 login">
-                <input type='text' placeholder="Last Name" />
+                <input 
+                value={lastName}
+                onChange = {(e)=>SetLastName(e.target.value)}
+                type='text' placeholder="Last Name" />
             </div>
             <div  class="col-12 login">
-                <input type='email' placeholder="Email" />
+                <input 
+                value={email}
+                onChange = {(e)=>SetEmail(e.target.value)}
+                type='email' placeholder="Email" />
             </div>
             <div  class="col-12 login">
-                <textarea type='text' placeholder="Address" />
+                <textarea 
+                value={address}
+                onChange = {(e)=>SetAddress(e.target.value)}
+                type='text' placeholder="Address" />
             </div>
             <div class="col-12 login">
-                <input type='text' placeholder="Phone" />
+                <input 
+                value={phone}
+                onChange = {(e)=>SetPhone(e.target.value)}type='text' placeholder="Phone" />
              </div>
              <div class="col-12 login">
-                <input type='password' placeholder="Choose Password" />
+                <input 
+                value={password}
+                onChange = {(e)=>SetPassword(e.target.value)}type='password' placeholder="Choose Password" />
              </div>
              <div class="col-12 login">
-                <input type='password' placeholder="Confirm Password" />
+                <input 
+                value={confirmPassword}
+                onChange = {(e)=>SetConfirmPassword(e.target.value)}
+                type='password' placeholder="Confirm Password" />
              </div>
+             <div >
               <div class="col-12 login">
-                <button type='submit'>Signup</button>
+              {!isSigningIn && <button  type='submit'>Signup</button>}
+                {isSigningIn && <button disabled>Signing you up...</button>}
               </div>
                 </div>
           </div>
           </div>
-          );}
+          </form>
+          </div>
+          );
+        }

@@ -1,17 +1,50 @@
 import axios from 'axios';
-import React,{useCallback, useState} from 'react';
+import React,{useCallback} from 'react';
 import {useDropzone} from 'react-dropzone';
 import '../../Contents/CSSFiles/Admin.css'; 
+import {useState, useEffect} from 'react';
 
 export const Admin=()=>{
 
 //   const [clothName,setClothName] = useState("");
 // const [clothPrice,setClothPrice] = useState("");
 // const [clothPictureId,setClothPictureId] = useState("");
+const [userX,setUserX] = useState([]);
+const [user,setUser] = useState({});
 const [data,setData] = useState({clothName:"",clothPrice:"",clothPictureId:""});
 
+const fetchUsers = () =>{
+  axios.get("http://localhost:8080/api/signup",
+  {
+   
+  headers:{
+      "Content-Type": "application/json"
+   }
+  }).then(res =>{
+ 
+    setUserX(res.data);
+  })
+};
+
+useEffect(()=>{
+  fetchUsers();
+},[]);
+
+ 
 	return(
 			<div>
+        <div>
+        <h1>Registered Customers</h1>
+        <hr/>
+        <div class="listOfCustomers" >
+      {
+          userX.map((user,index)=>(<li key = {index}>
+          {user.firstName} {user.lastName}
+        </li>))
+    }
+        </div>
+        </div>
+
 				<h1>Add New Product</h1>
         <hr/>
         <div class="container">
@@ -40,7 +73,7 @@ const [data,setData] = useState({clothName:"",clothPrice:"",clothPictureId:""});
 
 
 		)
-
+  
     function handleChange(e){
         const name = e.target.name;
         const value = e.target.value;

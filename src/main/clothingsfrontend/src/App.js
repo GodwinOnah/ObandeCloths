@@ -5,6 +5,7 @@ import {Login} from './Contents/JSFiles/Login.js';
 import {Signup} from './Contents/JSFiles/Signup.js';
 import {Admin}from './Contents/JSFiles/Admin.js';
 import {Clothings}from './Contents/JSFiles/Clothings.js';
+import "react-toastify/dist/ReactToastify.css";
 
 
 function App() {

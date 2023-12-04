@@ -1,9 +1,10 @@
 import axios from 'axios';
 import {useState, useEffect} from 'react';
 
+
 export const Clothings = () => {
 
-    const [clothings,SetClothings] = useState([]);
+  const [clothings,SetClothings] = useState([]);
 
      const fetchClothings = () =>{
        axios.get("http://localhost:8080/api/clothings").then(res =>{
@@ -11,7 +12,10 @@ export const Clothings = () => {
          SetClothings(res.data);
        })
      };
-     
+
+     useEffect(()=>{
+      fetchClothings();
+     },[]);
 
 
        return clothings.map((clothing,index)=>{
@@ -25,7 +29,7 @@ export const Clothings = () => {
            <h3><strong >Price:</strong><strong class="pricing">{clothing.clothPrice}</strong></h3>
          </div>
        </div> 
-       <div class="test"> Hello</div>
+
 
            </div>
          </div>

@@ -19,13 +19,12 @@ import static org.springframework.http.MediaType.*;
 @Service
 public class ClothingService {
     private final ClothingsRepo clothingsRepo;
-    public final Files files;
+    private final Files files;
     @Autowired
     public ClothingService(ClothingsRepo clothingsRepo, Files files) {
         this.files = files;
         this.clothingsRepo = clothingsRepo;
     }
-
 
     public List<Clothings> getClothings(){
         return clothingsRepo.findAll();

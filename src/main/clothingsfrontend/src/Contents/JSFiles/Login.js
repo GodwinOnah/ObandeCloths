@@ -1,41 +1,68 @@
 import '../../Contents/CSSFiles/Login.css';
-import {Link } from "react-router-dom";
-import axios from 'axios';
-import {useState, useEffect} from 'react';
+import {Form, Link } from "react-router-dom";
+import {useState} from 'react';
 
 
-export const Login=()=>{
+export const Login = () =>{
 
-const [exist,SetExist] = useState([]);
+const [email,SetEmail] = useState('');
+const [password,SetPassword] = useState('');
+const [data,SetData] = useState({});
+const [isLoggingIn,SetIsLoggingIn] = useState(false)
 
- const fetchUser = () =>{
-       axios.post("http://localhost:8080/api/login").then(res =>{
-         if(res) return "Logged in successfully";
-         return "Not Logged in";
+const handleSubmit = (e) =>{
+  e.preventDefault();
+  SetIsLoggingIn(true);
+  const datax = {email, password};
+  SetData(datax);
+  
+  fetch(
+  "http://localhost:8080/api/login",
+    {
+      method: 'POST',
+      headers:{
+          "Content-Type": "Json"
+       },
+      body: JSON.stringify(data)
+      }
+  ).then(res =>{
+          SetIsLoggingIn(false);
+          console.log(res)
+          return res;
+          
        })
-     };
-
-      useEffect(()=>{
-             fetchUser();
-            },[]);
-
+      };
+   
 	return(
 			<div>
 				<h1>Login</h1>
         <hr/>
+        <form onSubmit={handleSubmit}>
         <div class="container">
           <div class="row  ">
             <div  class="col-12 login">
-                <input type='email' placeholder="Email" />
+                <input 
+                value={email}
+                onChange = {(e)=>SetEmail(e.target.value)}
+                type='email' 
+                placeholder="Email" />
             </div>
              <div class="col-12 login">
-                <input type='password' placeholder="Choose Password" />
+                <input 
+                value={password}
+                onChange = {(e)=>SetPassword(e.target.value)}
+                type='password' 
+                placeholder="Choose Password" />
              </div>
               <div class="col-12 login">
-                <button type='submit'>Login</button>
+                {!isLoggingIn && <button type='submit'>Login</button>}
+                {isLoggingIn && <button disabled>Logging you in...</button>}
               </div>
               <div>New User? <Link to="/Signup">Register</Link></div>
                 </div>
           </div>
+          </form>
           </div>
-          );}
+          );
+        }
+     

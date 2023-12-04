@@ -1,9 +1,9 @@
 package obandecloths.Repositories;
 
-import obandecloths.User;
+import obandecloths.UserX;
 import org.springframework.data.jpa.repository.JpaRepository;
-    public interface SignupRepo extends JpaRepository<User,Integer> {
-         User findByEmail(String Email);
-         User findByPassword(String Password);
+    public interface SignupRepo extends JpaRepository<UserX,Integer> {
+         UserX findByEmail(String email);
+         UserX findByPassword(String password);
     }
 
