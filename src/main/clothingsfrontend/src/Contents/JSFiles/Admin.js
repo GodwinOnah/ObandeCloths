@@ -13,7 +13,7 @@ const [userX,setUserX] = useState([]);
 const [user,setUser] = useState({});
 const [data,setData] = useState({clothName:"",clothPrice:"",clothPictureId:""});
 
-const fetchUsers = () =>{
+useEffect(()=>{
   axios.get("http://localhost:8080/api/signup",
   {
    
@@ -24,16 +24,12 @@ const fetchUsers = () =>{
  
     setUserX(res.data);
   })
-};
-
-useEffect(()=>{
-  fetchUsers();
 },[]);
 
 const userY = () =>{
   return (
     <table class="table table-hover">
-    <thead class="thead-light">
+    <thead>
          <tr>
          <th>USER</th>
          <th>FIRST NAME</th>
@@ -43,36 +39,34 @@ const userY = () =>{
          <th>PHONE NUMBER</th>
          </tr>
        </thead>
-        <tbody>   
-             <tr>
-             {  userX.map((user,index)=>(<li key = {index}>
-               <th>{index+1}</th>
+       <tbody> 
+             {
+             userX.map((user,index)=>(
+               <tr key = {index}>              
+               <th >{index+1}</th>
                <td>{user.firstName}</td>
                <td>{user.lastName}</td>
                <td>{user.email}</td>
                <td>{user.address}</td>
-               <td>{user.phone}</td>
-         </li> 
-        ))}
-               </tr>
+               <td>{user.phone}</td>             
+               </tr>  
+            ))
+            }           
             </tbody>
            </table>  
   )}
- 
 	return(
 			<div>
+        <h1 style={{color:'Blue', margin:'100px'}}>Welcome Admin</h1>
         <div>
-        <h1>Registered Customers</h1>
+        <h3>Registered Customers</h3>
         <hr/>
         <div class="listOfCustomers" >
-         
          {userY()}
-        
-     
         </div>
         </div>
 
-				<h1>Add New Product</h1>
+				<h3>Add New Product</h3>
         <hr/>
         <div class="container">
           <form  post ="" onSubmit={formSubmit}>
@@ -180,6 +174,7 @@ const userY = () =>{
             const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
           
             return (
+            
               <div {...getRootProps()}>
                 <input {...getInputProps()} />
                 {
