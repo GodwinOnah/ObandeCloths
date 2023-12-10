@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class Files {
+public class FileStore {
     @Autowired
-    public Files(AmazonS3 s3) {
+    public FileStore(AmazonS3 s3) {
         this.s3 = s3;
     }
 

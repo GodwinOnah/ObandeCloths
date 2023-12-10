@@ -45,7 +45,7 @@ private final SignupService signupService;
     public  String addUser(@RequestBody NewRequest newRequest)
             throws URISyntaxException
     {
-
+        System.out.println(newRequest.email);
         UserX emailExist = signupService.findByEmail(newRequest.email);
         if(emailExist!=null) return "Email already exist";
         UserX user = new UserX();

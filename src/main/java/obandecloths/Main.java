@@ -1,20 +1,11 @@
 package obandecloths;
 
-import jdk.jfr.ContentType;
-import obandecloths.Controllers.ClothingsController;
-import obandecloths.bucket.BucketName;
-import obandecloths.files.Files;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.*;
-
-import static org.springframework.http.MediaType.*;
 @SpringBootApplication
 public class Main {
 
@@ -22,9 +13,19 @@ public class Main {
     }
 
     public static void main(String[] args) {
-
         SpringApplication.run(Main.class,args);
     }
+//
+//    @Bean
+//    public WebMvcConfigurer corsConfigurer(){
+//        return new WebMvcConfigurer(){
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry){
+//                registry.addMapping("/*")
+//                        .allowedOrigins("*");
+//            }
+//        };
+//    }
 
 }
 

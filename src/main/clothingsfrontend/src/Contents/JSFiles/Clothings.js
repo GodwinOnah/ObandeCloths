@@ -6,15 +6,11 @@ export const Clothings = () => {
 
   const [clothings,SetClothings] = useState([]);
 
-     const fetchClothings = () =>{
-       axios.get("http://localhost:8080/api/clothings").then(res =>{
+     useEffect(()=>{
+      axios.get("http://localhost:8080/api/clothings").then(res =>{
       
          SetClothings(res.data);
        })
-     };
-
-     useEffect(()=>{
-      fetchClothings();
      },[]);
 
 
@@ -29,7 +25,6 @@ export const Clothings = () => {
            <h3><strong >Price:</strong><strong class="pricing">{clothing.clothPrice}</strong></h3>
          </div>
        </div> 
-
 
            </div>
          </div>

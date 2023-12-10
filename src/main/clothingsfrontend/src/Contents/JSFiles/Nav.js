@@ -1,27 +1,21 @@
 import React,{Component} from 'react';
 import {Link } from "react-router-dom";
+import {Signup} from './Signup.js';
+import {Login} from './Login.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import '../../Contents/CSSFiles/Nav.css'; 
 
-
-
 export const Nav = () => {
 
- 
     return (
-
-
       <nav class="navbar navbar-expand-lg bg-body-tertiary bg-primary sticky-top">
-      <div class="container-fluid">
-    
+      <div class="container-fluid">   
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            
-           
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">       
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Menu
@@ -40,11 +34,11 @@ export const Nav = () => {
             <li class="nav-item ">
             <Link to="/" class="navItem1" style={{ textDecoration: 'none' }}>Home</Link>
             </li>
-            <li class="nav-item">
-            <Link to="/Login" class="navItem1" style={{ textDecoration: 'none' }}>Login</Link>
+            <li class="navItem1">
+            <Login/>
             </li>
-            <li class="nav-item ">
-            <Link to="/Signup" class="navItem1" style={{ textDecoration: 'none' }}>Signup</Link>
+            <li class="navItem1" >
+            <Signup/>
             </li>
           </ul>
           <form class="d-flex navItem1" role="search">

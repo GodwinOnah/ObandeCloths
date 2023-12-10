@@ -1,14 +1,22 @@
 import '../../Contents/CSSFiles/Login.css';
-import {Form, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {useState} from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { Signup } from './Signup';
 
 
 export const Login = () =>{
+  
+  const [email,SetEmail] = useState('');
+  const [password,SetPassword] = useState('');
+  const [data,SetData] = useState({});
+  const [isLoggingIn,SetIsLoggingIn] = useState(false);
+  const [show, setShow] = useState(false); 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-const [email,SetEmail] = useState('');
-const [password,SetPassword] = useState('');
-const [data,SetData] = useState({});
-const [isLoggingIn,SetIsLoggingIn] = useState(false)
+ 
 
 const handleSubmit = (e) =>{
   e.preventDefault();
@@ -32,9 +40,11 @@ const handleSubmit = (e) =>{
           
        })
       };
-   
+
+ const LoginModal = () =>{
+  
 	return(
-			<div>
+			<div class="modal1">
 				<h1>Login</h1>
         <hr/>
         <form onSubmit={handleSubmit}>
@@ -55,14 +65,44 @@ const handleSubmit = (e) =>{
                 placeholder="Choose Password" />
              </div>
               <div class="col-12 login">
-                {!isLoggingIn && <button type='submit'>Login</button>}
-                {isLoggingIn && <button disabled>Logging you in...</button>}
+                {isLoggingIn && <strong>Logging you in...</strong>}
               </div>
-              <div>New User? <Link to="/Signup">Register</Link></div>
+              <div>New User? <strong style={{color:"blue"}}><Signup/></strong></div>
                 </div>
           </div>
           </form>
           </div>
           );
         }
+
+        return (
+          <div style={{cursor:"pointer"}}>
+            <p onClick={handleShow}>
+             Login
+            </p>
+      
+            <Modal show={show} onHide={handleClose}>
+              <Modal.Header closeButton>
+                <Modal.Title>Login</Modal.Title>
+              </Modal.Header>
+              <form onSubmit={handleSubmit}>
+              <Modal.Body><LoginModal/></Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleClose}>
+                  Cancel
+                </Button>
+                <Button type="submit" variant="primary">
+                  Submit
+                </Button>
+              </Modal.Footer>
+              </form>
+            </Modal>
+          </div>
+        );
+      }
+      
      
+  
+  
+  
+  

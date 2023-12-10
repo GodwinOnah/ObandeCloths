@@ -1,29 +1,25 @@
 package obandecloths.Controllers;
 import obandecloths.Clothings;
-import obandecloths.Repositories.ClothingsRepo;
 import obandecloths.Services.ClothingService;
-import obandecloths.bucket.BucketName;
-import obandecloths.files.Files;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
+
 import java.net.URISyntaxException;
 import java.util.*;
-import static org.springframework.http.MediaType.*;
 
 @RestController
 @RequestMapping("api/clothings")
-@CrossOrigin("*")
+@CrossOrigin("http://localhost:3000")
+
 public class ClothingsController {
     public final ClothingService clothingService;
 
 
     @Autowired
     public ClothingsController (ClothingService clothingService) {
+
         this.clothingService = clothingService;
     }
 
@@ -45,25 +41,30 @@ public class ClothingsController {
     };
 
     @PostMapping
-    public void addClothings(@RequestBody NewRequest newRequest)
-            throws URISyntaxException
-    {
+    public String addClothings(@RequestBody NewRequest newRequest)
+            throws URISyntaxException {
         Clothings clothings = new Clothings();
         clothings.setClothName(newRequest.clothName);
         clothings.setClothPictureId(newRequest.clothPictureId);
         clothings.setClothPrice(newRequest.clothPrice);
 
-        clothingService.addClothings(clothings);
+        boolean added = clothingService.addClothings(clothings);
+
+        if(added) return "Item added successfully";
+
+        return "Item not added";
     }
 
     @PostMapping(
-            path = "{ClothPictureId}/images/Downloads",
+            path = "{clothPictureId}/images/uploads",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public void uploadClothingsImage(@PathVariable Integer clothId , @RequestParam("file") MultipartFile file)
+    public void uploadClothingsImage(@PathVariable Integer clothId, @RequestParam("file") MultipartFile file)
             throws URISyntaxException
     {
+        System.out.println(file.getName());
+
         clothingService.uploadClothingsImage(clothId,file);
 
     }

@@ -1,14 +1,11 @@
 package obandecloths.Services;
 
 import obandecloths.Clothings;
-import obandecloths.Controllers.ClothingsController;
 import obandecloths.Repositories.ClothingsRepo;
 import obandecloths.bucket.BucketName;
-import obandecloths.files.Files;
+import obandecloths.files.FileStore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -19,9 +16,9 @@ import static org.springframework.http.MediaType.*;
 @Service
 public class ClothingService {
     private final ClothingsRepo clothingsRepo;
-    private final Files files;
+    private final FileStore files;
     @Autowired
-    public ClothingService(ClothingsRepo clothingsRepo, Files files) {
+    public ClothingService(ClothingsRepo clothingsRepo, FileStore files) {
         this.files = files;
         this.clothingsRepo = clothingsRepo;
     }
@@ -43,8 +40,7 @@ public class ClothingService {
         return true;
     }
 
-    public void uploadClothingsImage(Integer clothId
-            ,  MultipartFile file)
+    public void uploadClothingsImage(Integer clothId,  MultipartFile file)
             throws URISyntaxException
     {
         if(file.isEmpty()){
