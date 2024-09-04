@@ -38,6 +38,7 @@ private final SignupService signupService;
 
     @GetMapping("{id}")
     public Optional<UserX> getUserById(@PathVariable("id") Integer id) {
+
         return signupService.getUserById(id);
     }
 

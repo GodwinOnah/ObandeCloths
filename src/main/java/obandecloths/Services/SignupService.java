@@ -33,14 +33,8 @@ public class SignupService {
         return  Optional.ofNullable(signupRepo.findById(id).orElseThrow(RuntimeException::new));
     }
 
-
     public UserX findByEmail(String email) {
         return signupRepo.findByEmail(email);
     };
 
-    public UserX findByPassword(String password) {
-        return signupRepo.findByPassword(password);
-    }
-
-    ;
 }

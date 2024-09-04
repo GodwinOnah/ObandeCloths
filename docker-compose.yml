@@ -1,23 +1,42 @@
 services:
-  db:
+  postgresqldb:
     container_name: postgres
     image: postgres
     environment:
       POSTGRES_USER: Godwin
       POSTGRES_PASSWORD: secret
+      POSTGRES_DB: clothingsdb
       PGDATA: /data/postgres
     volumes:
-      - db:/data/postgres
+      -  clothings_data:/data/postgres
     ports:
-      - "5332:5432"
+      - "5432:5432"
     networks:
       - db
     restart: unless-stopped
+
+
+  clothiingapp:
+      image: 'clothingapp:v1'
+      build:
+        context: .
+      container_name: clothiingapp
+      depends_on:
+        - postgresqldb
+      environment:
+        - POSTGRES_USER=Godwin
+        - POSTGRES_PASSWORD=secret
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/clothingsdb
+        - SPRING_DATASOURCE_USERNAME=Godwin
+        - SPRING_DATASOURCE_PASSWORD=secret
+        - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      ports:
+        - "8081:8080"
 
 networks:
   db:
     driver: bridge
 
 volumes:
-  db:
+  clothings_data:
 
