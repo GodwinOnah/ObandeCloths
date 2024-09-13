@@ -15,18 +15,48 @@ services:
       - db
     restart: unless-stopped
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    depends_on:
+      - postgresqldb
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: godwin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: secret
+#      PGADMIN_HOST: postgresqldb
+    volumes:
+      - clothings_data:/var/lib/pgadmin
+    networks:
+      - db
 
-  clothiingapp:
+  jenkins:
+    image: jenkins/jenkins
+    container_name: jenkins-container
+#    user: root
+#    privileged: true
+    restart: always
+    ports:
+      - "8085:8080"
+      - "50000:50000"
+    volumes:
+      - clothings_data:/var/jenkins_home
+    networks:
+      - db
+
+  clothingapp:
       image: 'clothingapp:v1'
       build:
         context: .
-      container_name: clothiingapp
+      container_name: clothingapp
       depends_on:
         - postgresqldb
       environment:
         - POSTGRES_USER=Godwin
         - POSTGRES_PASSWORD=secret
-        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/clothingsdb
+        - SPRING_DATASOURCE_URL=postgresql://postgresqldb:5432/clothingsdb
         - SPRING_DATASOURCE_USERNAME=Godwin
         - SPRING_DATASOURCE_PASSWORD=secret
         - SPRING_JPA_HIBERNATE_DDL_AUTO=update
