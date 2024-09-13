@@ -3,8 +3,8 @@ services:
     container_name: postgres
     image: postgres
     environment:
-      POSTGRES_USER: Godwin
-      POSTGRES_PASSWORD: secret
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: clothingsdb
       PGDATA: /data/postgres
     volumes:
@@ -24,8 +24,8 @@ services:
     ports:
       - "8888:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: godwin@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: secret
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
 #      PGADMIN_HOST: postgresqldb
     volumes:
       - clothings_data:/var/lib/pgadmin
@@ -54,11 +54,11 @@ services:
       depends_on:
         - postgresqldb
       environment:
-        - POSTGRES_USER=Godwin
-        - POSTGRES_PASSWORD=secret
-        - SPRING_DATASOURCE_URL=postgresql://postgresqldb:5432/clothingsdb
-        - SPRING_DATASOURCE_USERNAME=Godwin
-        - SPRING_DATASOURCE_PASSWORD=secret
+        - POSTGRES_USER=${POSTGRES_USER}
+        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresqldb:5432/clothingsdb
+        - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+        - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
         - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       ports:
         - "8081:8080"
